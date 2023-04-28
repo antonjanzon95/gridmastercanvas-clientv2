@@ -78,7 +78,9 @@ export async function printRoomList() {
 }
 
 async function fetchRooms() {
-  const response = await fetch('http://localhost:3000/rooms');
+  const response = await fetch(
+    'https://gridmastercanvas-apiv2-production.up.railway.app/rooms'
+  );
   const data = await response.json();
   return data;
 }

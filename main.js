@@ -7,7 +7,7 @@ import { renderStartPage } from './scripts/startPage';
 import { fetchUsers } from './scripts/userService';
 
 export let grids = {};
-export const socket = io('http://localhost:3000');
+export const socket = io('gridmastercanvas-apiv2-production.up.railway.app');
 
 document.querySelector('#app').innerHTML = `
 <div class='h-screen bg-teal-900 parent'>

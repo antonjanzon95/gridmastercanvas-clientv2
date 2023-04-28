@@ -1,13 +1,16 @@
 import { fetchImages, renderImages } from './showimgs';
 
 const saveImagePost = async (roomId) => {
-  const response = await fetch('http://localhost:3000/image/save', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ roomId }),
-  });
+  const response = await fetch(
+    'https://gridmastercanvas-apiv2-production.up.railway.app/image/save',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ roomId }),
+    }
+  );
   const data = await response.json();
 };
 

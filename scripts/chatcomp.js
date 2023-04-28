@@ -96,7 +96,8 @@ export function renderChatHtml() {
 
 async function fetchRoomMessages(roomId) {
   const response = await fetch(
-    'http://localhost:3000/rooms/messages/' + roomId
+    'https://gridmastercanvas-apiv2-production.up.railway.app/rooms/messages/' +
+      roomId
   );
   const data = await response.json();
 

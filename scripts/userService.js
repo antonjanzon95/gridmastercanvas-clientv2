@@ -1,5 +1,7 @@
 export async function fetchUsers() {
-  const response = await fetch('http://localhost:3000/users');
+  const response = await fetch(
+    'https://gridmastercanvas-apiv2-production.up.railway.app/users'
+  );
   const users = await response.json();
   console.log('users', users);
   return users;
@@ -8,11 +10,11 @@ export async function fetchUsers() {
 export function renderUserCount(userCount) {
   const usersOnlineElement = document.querySelector('#users-online');
 
-  if(usersOnlineElement){
-  usersOnlineElement.innerHTML = 'Users online: ' + userCount;
-} else {
-  return;
-}
+  if (usersOnlineElement) {
+    usersOnlineElement.innerHTML = 'Users online: ' + userCount;
+  } else {
+    return;
+  }
 }
 
 export function renderUsers(globalUsers) {
@@ -26,7 +28,7 @@ export function renderUsers(globalUsers) {
 
   scrollContainer.innerHTML = '';
 
-  users.forEach(user => {
+  users.forEach((user) => {
     const item = document.createElement('div');
     item.classList.add('item');
 
@@ -41,5 +43,5 @@ export function renderUsers(globalUsers) {
     item.appendChild(name);
 
     scrollContainer.appendChild(item);
-  })
+  });
 }

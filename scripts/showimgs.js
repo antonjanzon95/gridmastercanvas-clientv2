@@ -1,11 +1,15 @@
 export async function fetchImages() {
-  const response = await fetch('http://localhost:3000/image');
+  const response = await fetch(
+    'https://gridmastercanvas-apiv2-production.up.railway.app/image'
+  );
   const data = await response.json();
   return data;
 }
 
 export async function fetchImageById(id) {
-  const response = await fetch('http://localhost:3000/image/' + id);
+  const response = await fetch(
+    'https://gridmastercanvas-apiv2-production.up.railway.app/image/' + id
+  );
   const data = await response.json();
   console.log(data);
   return data;
