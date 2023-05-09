@@ -1,24 +1,24 @@
-import { socket } from '../main';
-import { renderChatHtml } from './chatcomp';
-import { renderRoomsSection } from './gameRooms';
-import { showHighScorePage } from './gameover';
-import { initGlobalChatSockets, removeGlobalSockets } from './globalSockets';
-import { viewSavedImages } from './saveImg';
-import { renderStartPage } from './startPage';
-import { fetchUsers, renderUserCount, renderUsers } from './userService';
+import { socket } from "../main";
+import { renderChatHtml } from "./chatcomp";
+import { renderRoomsSection } from "./gameRooms";
+import { showHighScorePage } from "./gameover";
+import { initGlobalChatSockets, removeGlobalSockets } from "./globalSockets";
+import { viewSavedImages } from "./saveImg";
+import { renderStartPage } from "./startPage";
+import { fetchUsers, renderUserCount, renderUsers } from "./userService";
 
 export function initLog() {
   renderStartPage();
   renderLogo();
-  if (sessionStorage.getItem('user')) {
-    console.log('logged in');
+  if (sessionStorage.getItem("user")) {
+    console.log("logged in");
     renderChatHtml();
     renderRoomsSection();
     renderSiteNav();
     renderLogoutButton();
   } else {
-    socket.off('saveUser');
-    console.log('not logged in');
+    socket.off("saveUser");
+    console.log("not logged in");
     renderWelcome();
     renderStartPage();
     renderLogForm();
@@ -26,62 +26,61 @@ export function initLog() {
 }
 
 function renderWelcome() {
-  let div = document.createElement('div');
-  let header = document.querySelector('header');
+  let div = document.createElement("div");
+  let header = document.querySelector("header");
 
-  div.innerHTML =
-    'Välkommen till gridmaster Canvas, logga in för att börja måla';
+  div.innerHTML = "Welcome to Gridmaster Canvas, login to start painting!";
 
   header.append(div);
 }
 
 function renderLogForm() {
-  let header = document.querySelector('header');
-  let logForm = document.createElement('div');
-  let logInput = document.createElement('input');
-  let logUserButton = document.createElement('button');
+  let header = document.querySelector("header");
+  let logForm = document.createElement("div");
+  let logInput = document.createElement("input");
+  let logUserButton = document.createElement("button");
 
-  logInput.type = 'text';
-  logInput.placeholder = 'name';
-  logUserButton.innerHTML = 'log in';
+  logInput.type = "text";
+  logInput.placeholder = "name";
+  logUserButton.innerHTML = "log in";
 
   header.appendChild(logForm);
   logForm.append(logInput, logUserButton);
 
-  logUserButton.addEventListener('click', (e) => {
+  logUserButton.addEventListener("click", (e) => {
     e.preventDefault();
 
-    if (logInput.value === '') {
+    if (logInput.value === "") {
       return;
     }
 
-    let user = { name: logInput.value, color: '', id: '' };
+    let user = { name: logInput.value, color: "", id: "" };
 
-    sessionStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
 
-    socket.emit('saveUser', JSON.parse(sessionStorage.getItem('user')));
+    socket.emit("saveUser", JSON.parse(sessionStorage.getItem("user")));
 
-    header.innerHTML = '';
-    logInput.value = '';
-    logForm.innerHTML = '';
+    header.innerHTML = "";
+    logInput.value = "";
+    logForm.innerHTML = "";
     initLog();
   });
 
-  socket.on('userLoggedIn', (data) => {
+  socket.on("userLoggedIn", (data) => {
     console.log(data);
     fetchUsers();
     const user = data.user;
-    sessionStorage.setItem('globalMessages', JSON.stringify([]));
-    sessionStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem("globalMessages", JSON.stringify([]));
+    sessionStorage.setItem("user", JSON.stringify(user));
 
     initGlobalChatSockets();
 
     console.log(`${user.name} has logged in with color ${user.color}`);
     const color = user.color;
     console.log(color);
-    sessionStorage.setItem('color', color);
+    sessionStorage.setItem("color", color);
 
-    socket.on('monitorGlobalUsers', (globalUsers) => {
+    socket.on("monitorGlobalUsers", (globalUsers) => {
       renderUserCount(globalUsers.length);
       renderUsers(globalUsers);
     });
@@ -89,14 +88,14 @@ function renderLogForm() {
 }
 
 function renderLogo() {
-  let header = document.querySelector('#header');
-  let div = document.createElement('div');
-  let logo = document.createElement('img');
+  let header = document.querySelector("#header");
+  let div = document.createElement("div");
+  let logo = document.createElement("img");
 
-  logo.setAttribute('src', '/gridmastercanvas_logo_white.png');
-  logo.setAttribute('alt', 'Grid Master Canvas Logo');
-  logo.setAttribute('width', '400');
-  logo.classList.add('logo-header');
+  logo.setAttribute("src", "/gridmastercanvas_logo_white.png");
+  logo.setAttribute("alt", "Grid Master Canvas Logo");
+  logo.setAttribute("width", "400");
+  logo.classList.add("logo-header");
 
   header.appendChild(div);
   div.appendChild(logo);
@@ -108,32 +107,32 @@ function renderSiteNav() {
   let isRoomsVisible = false;
   let isHowToPlayVisible = false;
 
-  let header = document.querySelector('header');
-  let main = document.querySelector('main');
-  let navContainer = document.createElement('div');
+  let header = document.querySelector("header");
+  let main = document.querySelector("main");
+  let navContainer = document.createElement("div");
 
-  navContainer.classList.add('navContainer');
+  navContainer.classList.add("navContainer");
 
-  let navPlay = document.createElement('button');
-  let navImg = document.createElement('button');
-  let navHow = document.createElement('button');
-  let navScore = document.createElement('button');
+  let navPlay = document.createElement("button");
+  let navImg = document.createElement("button");
+  let navHow = document.createElement("button");
+  let navScore = document.createElement("button");
 
-  navPlay.innerHTML = 'Play';
-  navPlay.classList.add('nav-btn');
-  navImg.innerHTML = 'Saved images';
-  navImg.classList.add('nav-btn');
-  navHow.innerHTML = 'How to play';
-  navHow.classList.add('nav-btn');
-  navScore.innerHTML = 'Highscores';
-  navScore.classList.add('nav-btn');
+  navPlay.innerHTML = "Play";
+  navPlay.classList.add("nav-btn");
+  navImg.innerHTML = "Saved images";
+  navImg.classList.add("nav-btn");
+  navHow.innerHTML = "How to play";
+  navHow.classList.add("nav-btn");
+  navScore.innerHTML = "Highscores";
+  navScore.classList.add("nav-btn");
 
   header.appendChild(navContainer);
   navContainer.append(navPlay, navImg, navHow, navScore);
 
-  navPlay.addEventListener('click', () => {
+  navPlay.addEventListener("click", () => {
     if (isRoomsVisible) {
-      header.innerHTML = '';
+      header.innerHTML = "";
       initLog();
     } else {
       renderRoomsSection();
@@ -141,20 +140,20 @@ function renderSiteNav() {
     isRoomsVisible = !isRoomsVisible;
   });
 
-  navImg.addEventListener('click', () => {
+  navImg.addEventListener("click", () => {
     if (isImagesVisibile) {
-      header.innerHTML = '';
+      header.innerHTML = "";
       initLog();
     } else {
-      main.innerHTML = '';
+      main.innerHTML = "";
       viewSavedImages();
     }
     isImagesVisibile = !isImagesVisibile;
   });
 
-  navHow.addEventListener('click', () => {
+  navHow.addEventListener("click", () => {
     if (isHowToPlayVisible) {
-      header.innerHTML = '';
+      header.innerHTML = "";
       initLog();
     } else {
       renderHowToPlay();
@@ -162,9 +161,9 @@ function renderSiteNav() {
     isHowToPlayVisible = !isHowToPlayVisible;
   });
 
-  navScore.addEventListener('click', () => {
+  navScore.addEventListener("click", () => {
     if (isHighScoreVisible) {
-      header.innerHTML = '';
+      header.innerHTML = "";
       initLog();
     } else {
       showHighScorePage();
@@ -174,12 +173,12 @@ function renderSiteNav() {
 }
 
 function renderHowToPlay() {
-  let main = document.querySelector('main');
+  let main = document.querySelector("main");
 
-  let div = document.createElement('div');
-  div.setAttribute('class', 'howToContainer');
+  let div = document.createElement("div");
+  div.setAttribute("class", "howToContainer");
 
-  main.innerHTML = '';
+  main.innerHTML = "";
 
   div.innerHTML = `
   <div class="howToPlayDiv">
@@ -202,40 +201,40 @@ function renderHowToPlay() {
 }
 
 function renderLogoutButton() {
-  let chatDiv = document.querySelector('#chat-div');
-  let mainContainer = document.querySelector('main');
-  let header = document.querySelector('header');
-  let logForm = document.createElement('div');
-  let logOutButton = document.createElement('button');
-  logOutButton.classList.add('nav-btn');
+  let chatDiv = document.querySelector("#chat-div");
+  let mainContainer = document.querySelector("main");
+  let header = document.querySelector("header");
+  let logForm = document.createElement("div");
+  let logOutButton = document.createElement("button");
+  logOutButton.classList.add("nav-btn");
 
-  logOutButton.innerHTML = 'log out';
+  logOutButton.innerHTML = "log out";
   header.appendChild(logForm);
   logForm.appendChild(logOutButton);
 
-  logOutButton.addEventListener('click', () => {
+  logOutButton.addEventListener("click", () => {
     // let user = JSON.parse(sessionStorage.getItem('user'));
 
-    socket.emit('removeUser', JSON.parse(sessionStorage.getItem('user')));
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('color');
-    sessionStorage.removeItem('globalMessages');
+    socket.emit("removeUser", JSON.parse(sessionStorage.getItem("user")));
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("color");
+    sessionStorage.removeItem("globalMessages");
 
-    mainContainer.innerHTML = '';
+    mainContainer.innerHTML = "";
 
-    chatDiv.innerHTML = '';
-    header.innerHTML = '';
+    chatDiv.innerHTML = "";
+    header.innerHTML = "";
     removeGlobalSockets();
     initLog();
   });
 }
 
 export function disableNavBtns() {
-  const headerBtns = document.querySelectorAll('.nav-btn');
+  const headerBtns = document.querySelectorAll(".nav-btn");
   headerBtns.forEach((btn) => (btn.disabled = true));
 }
 
 export function enableNavBtns() {
-  const headerBtns = document.querySelectorAll('.nav-btn');
+  const headerBtns = document.querySelectorAll(".nav-btn");
   headerBtns.forEach((btn) => (btn.disabled = false));
 }
